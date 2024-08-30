@@ -21,6 +21,7 @@ userRouter.post('/signup',async (c)=>{
         data : {
           name : body.name,
           email: body.email,
+          //need to implement hashing here
           password : body.password,
         }
       });
@@ -33,7 +34,7 @@ userRouter.post('/signup',async (c)=>{
     }
     catch(err){
       c.status(403);
-      return c.text("Invalid try again"); 
+      return c.text("Cant signup"); 
     }
   })
   userRouter.post('/signin',async (c)=>{
@@ -58,7 +59,7 @@ userRouter.post('/signup',async (c)=>{
     catch(err){
       c.status(411);
       return c.json({
-        msg : "Invalid"
+        msg : "cant signin"
       })
     }
   });
