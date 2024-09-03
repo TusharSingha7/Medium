@@ -15,7 +15,8 @@ blogRouter.use('/*', async (c, next) => {
     //middleware
     //checkign the header
     //if failed return a 403 to the user
-    const header = c.req.header("Authorization") || "";
+    try {
+        const header = c.req.header("Authorization") || "";
     // console.log(header);
     const token = header;
     const response = await verify(token,c.env.JWT_SECRET);
@@ -34,6 +35,13 @@ blogRouter.use('/*', async (c, next) => {
       c.status(403);
       return c.json({error: "unauthorized"});
     }
+    }
+    catch(err){
+        c.status(403);
+        c.json({
+            msg : "Caught while verification"
+        })
+    }
    
 });
 blogRouter.post('/add', async(c)=>{
@@ -51,6 +59,7 @@ blogRouter.post('/add', async(c)=>{
                 authorId: authorId,
             }
         });
+        c.status(200);
         return c.json({
             msg : "Posted",
             id : blog.id
@@ -109,10 +118,23 @@ blogRouter.get('/fetch/:id',async (c)=>{
                 msg : "doesnot exist"
             });
         }
+        const authorId = blog.authorId;
+        const Aname = await prisma.user.findFirst({
+            where : {
+                id : authorId
+            },
+            select : {
+                name : true
+            }
+        })
         return c.json({
             title : blog?.title,
             content : blog?.content,
-            published : blog?.published
+            published : blog?.published,
+            id : blog.id,
+            author : {
+                name : Aname?.name
+            }
         });
     }
     catch(err){
@@ -126,7 +148,28 @@ blogRouter.get('/fetch/:id',async (c)=>{
 blogRouter.get('/bulk',async (c)=>{
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
-      }).$extends(withAccelerate())
-    const blogs = await prisma.post.findMany();
-    return c.json({blogs});
+      }).$extends(withAccelerate());
+
+    try {
+        const blogs = await prisma.post.findMany({
+            select : {
+                content : true,
+                title : true,
+                published : true,
+                id : true,
+                author : {
+                    select : {
+                        name : true
+                    }
+                }
+            }
+        });
+        return c.json({blogs});
+    }
+    catch(err){
+        c.status(411);
+        return c.json({
+            msg : "Caught!",
+        });
+    }
 })

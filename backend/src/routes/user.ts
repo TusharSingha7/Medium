@@ -29,12 +29,11 @@ userRouter.post('/signup',async (c)=>{
       const token = await sign({id : user.id},c.env.JWT_SECRET);
       return c.json({
       jwt : token,
-      msg : "SignUp successfull"
     });
     }
     catch(err){
       c.status(403);
-      return c.text("Cant signup"); 
+      return c.json({msg : "cant signup"}); 
     }
   })
   userRouter.post('/signin',async (c)=>{
