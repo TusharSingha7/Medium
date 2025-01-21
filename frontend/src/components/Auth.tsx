@@ -12,10 +12,10 @@ export const Auth = ({type}:{type : "signin" | "signup"})=>{
         try{
             const response = await axios.post(`${BACKEND_URL}/ap1/v1/user/${type == "signin" ? "signin" : "signup"}`,postInputs);
             const jwt = response.data.jwt;
-            localStorage.setItem("Authorization",jwt);
+            localStorage.setItem("token",jwt);
             navigate("/blogs")
         }catch(err){
-            alert("request failed");
+            alert(err);
             return;
         }
     }

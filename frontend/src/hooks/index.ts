@@ -52,6 +52,8 @@ export const useBlogs = () =>{
         .then(response=>{
             setBlogs(response.data.blogs);
             setLoading(false);
+        }).catch((err)=>{
+            alert(err);
         })
     },[]);
     return {

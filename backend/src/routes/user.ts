@@ -52,7 +52,7 @@ userRouter.post('/signup',async (c)=>{
         c.status(403);
         return c.json({error : "user not found"});
       }
-      const token = await sign({id : user.id},"secret");
+      const token = await sign({id : user.id},c.env.JWT_SECRET);
       return c.json({jwt : token});
     }
     catch(err){

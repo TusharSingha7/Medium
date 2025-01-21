@@ -16,7 +16,7 @@ blogRouter.use('/*', async (c, next) => {
     //checkign the header
     //if failed return a 403 to the user
     try {
-        const header = c.req.header("Authorization") || "";
+        const header = c.req.header("authorization") || "";
     // console.log(header);
     const token = header;
     const response = await verify(token,c.env.JWT_SECRET);
@@ -32,18 +32,17 @@ blogRouter.use('/*', async (c, next) => {
         await next();
     }
     else{
-      c.status(403);
-      return c.json({error: "unauthorized"});
+      return c.json({error: "unauthorized"},403);
     }
     }
     catch(err){
-        c.status(403);
-        c.json({
+        return c.json({
             msg : "Caught while verification"
-        })
+        },403);
     }
    
 });
+
 blogRouter.post('/add', async(c)=>{
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
@@ -106,7 +105,6 @@ blogRouter.get('/fetch/:id',async (c)=>{
       }).$extends(withAccelerate())
     try{
         const id =  c.req.param("id");
-        console.log(id);
         const blog = await prisma.post.findFirst({
             where : {
                 id : id
