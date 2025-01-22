@@ -1,5 +1,7 @@
 
+import axios from "axios";
 import { useNavigate } from "react-router-dom"
+import { BACKEND_URL } from "../config";
 interface BlogCardProps {
     authorName :  string,
     title : string,
@@ -12,7 +14,8 @@ export const BlogCard = (props : BlogCardProps)=>{
     return <div onClick={()=>{
         navigate(`/blog/${props.id}`);
     }} className="border border-b-slate-200 border-t-white border-l-white border-r-white pb-4 ml-20 mr-10 pt-5 min-w-96 cursor-pointer">
-        <div className="flex">
+        <div className="flex justify-between">
+            <div className="flex">
             <div className="flex flex-col justify-center">
                 <Avatar authorName={props.authorName}/>
             </div>
@@ -23,7 +26,7 @@ export const BlogCard = (props : BlogCardProps)=>{
             <div className="pl-2 text-slate-400">
             {props.publishedDate} 
             </div>
-            
+            </div>
         </div>
         <div className="text-2xl font-extrabold break-words">
             {props.title}

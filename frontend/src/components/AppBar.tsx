@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
+import Dropdown from "./dropdown";
 export const AppBar = ()=>{
     const navigate = useNavigate();
+    const [view,setView] = useState(false);
     return <div className="flex justify-center border border-bottom-slate-200">
         <div className="flex flex-1 pb-10 mt-5 ml-5 mr-5 ">
                 <button onClick={()=>{
@@ -26,10 +29,13 @@ export const AppBar = ()=>{
                 <button className="mr-3">
                 <div className="ay b cc cd fx dh jr n o js jt"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24" aria-label="Notifications"><path stroke="currentColor" strokeLinecap="round" d="M15 18.5a3 3 0 1 1-6 0"></path><path stroke="currentColor" strokeLinejoin="round" d="M5.5 10.532V9a6.5 6.5 0 0 1 13 0v1.532c0 1.42.564 2.782 1.568 3.786l.032.032c.256.256.4.604.4.966v2.934a.25.25 0 0 1-.25.25H3.75a.25.25 0 0 1-.25-.25v-2.934c0-.363.144-.71.4-.966l.032-.032A5.35 5.35 0 0 0 5.5 10.532Z"></path></svg></div>
                 </button>
-                <button className="rounded-full bg-black ml-3 min-w-10 min-h-10 border border-transparent text-center text-sm text-white transition-all shadow-sm hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
+                <button onClick={()=>{
+                    setView(!view);
+                }} className="rounded-full bg-black ml-3 min-w-10 min-h-10 border border-transparent text-center text-sm text-white transition-all shadow-sm hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
                 T
                 </button>
         </div>
+        {view ? <Dropdown/> : <div/>}
     </div>
     
 }
