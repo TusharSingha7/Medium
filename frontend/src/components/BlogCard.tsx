@@ -1,17 +1,18 @@
-
 import axios from "axios";
-import { useNavigate } from "react-router-dom"
 import { BACKEND_URL } from "../config";
-interface BlogCardProps {
+import { useNavigate } from "react-router-dom"
+export interface BlogCardProps {
     authorName :  string,
     title : string,
     content : string,
     publishedDate : string,
-    id : string
+    id : string,
+    view : boolean
 }
 export const BlogCard = (props : BlogCardProps)=>{
     const navigate = useNavigate();
-    return <div onClick={()=>{
+    return <div>
+    <div onClick={()=>{
         navigate(`/blog/${props.id}`);
     }} className="border border-b-slate-200 border-t-white border-l-white border-r-white pb-4 ml-20 mr-10 pt-5 min-w-96 cursor-pointer">
         <div className="flex justify-between">
@@ -38,6 +39,8 @@ export const BlogCard = (props : BlogCardProps)=>{
             {`${Math.ceil(props.content.length/200)} minute(s)`}
         </div>
     </div>
+    {props.view ? <Butt blogId={props.id}/> : <div></div>}
+    </div>
 }
 
 function Avatar({authorName} : {authorName : string}) {
@@ -45,4 +48,23 @@ function Avatar({authorName} : {authorName : string}) {
         <span className="font-medium text-gray-600 dark:text-gray-300">{authorName[0]}</span>
     </div>
     
+}
+function Butt({blogId} : {blogId:string}){
+    const navigate = useNavigate();
+    return <button onClick={async ()=>{
+        try{
+            const response = await axios.post(`${BACKEND_URL}/ap1/v1/blog/delete`,{
+                id : blogId
+            },{
+                headers : {
+                    Authorization : localStorage.getItem("token")
+                }
+            });
+            navigate('/blogs');
+            if(response) alert("success");
+        }
+        catch(e){
+            alert(e);
+        }
+    }} className="py-2 ml-20 font-bold text-sm text-red-400 border border-b border-l-0 border-r-0">Delete</button>
 }

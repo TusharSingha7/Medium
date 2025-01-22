@@ -67,6 +67,6 @@ export function Blog(){
         </div>
     }
     return <>
-    <FullBlog title={blog.title || ""} content={blog?.content} authorName={blog?.author.name}/>
+    <FullBlog blogId={blog.id} title={blog.title || ""} content={blog?.content} authorName={blog?.author.name}/>
     </>
 }

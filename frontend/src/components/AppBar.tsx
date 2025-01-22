@@ -2,6 +2,14 @@ import { useState } from "react";
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import Dropdown from "./dropdown";
+const getJWTPayload = (token : string) => {
+    try {
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch (error) {
+      console.error('Error decoding JWT:', error)
+      return null
+    }
+  }
 export const AppBar = ()=>{
     const navigate = useNavigate();
     const [view,setView] = useState(false);
@@ -21,6 +29,18 @@ export const AppBar = ()=>{
                     <input type="search" className="block w-full p-2 ps-10 text-sm text-gray-900 rounded-full bg-gray-50 focus:outline-none" placeholder="Search" required />
                     </div>
                 </form>
+                <button onClick={async ()=>{
+                    try{
+                        const token = localStorage.getItem("token") || "";
+                        const pyld = getJWTPayload(token);
+                        const userId = pyld.id;
+                        console.log(userId);
+                       navigate(`/blogs/${userId}`);
+                    }
+                    catch(err){
+                        alert(err);
+                    }
+                }} className="ml-4 font-bold">My Blogs</button>
         </div>
         <div className="flex pb-10 mt-5 ml-5 mr-5 items-center">
                 <Link to={'/publish'}>

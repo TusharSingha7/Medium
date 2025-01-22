@@ -67,9 +67,10 @@ export const Blogs = ()=>{
                 {blogs.map((blog)=>{
                     return <BlogCard key={blog.id} id={blog.id}
                     authorName={blog.author.name || "anonymous"} 
-                    publishedDate="31 august 2024"
+                    publishedDate={""}
                     title={blog.title}
                     content={blog.content}
+                    view = {false}
                     />
                 })}
             </div>

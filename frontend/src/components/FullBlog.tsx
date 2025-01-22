@@ -1,13 +1,13 @@
+
 import { AppBar } from "./AppBar"
 
-
-export const FullBlog = ({title,content,authorName} : {title : string,content:string,authorName:string}) => {
+export const FullBlog = ({title,content,authorName} : {title : string,content:string,authorName:string,blogId:string}) => {
     const obj = new Date();
     const date = obj.getDay().toString() +" "+ obj.getMonth().toString() +" "+ obj.getFullYear().toString();
     return <div>
     <AppBar/>
     <div className="grid grid-cols-12 px-10 w-full pt-20">
-                <div className="grid col-span-8 bg-red-200">
+                <div className="grid col-span-8 bg-red-200 p-5 rounded">
                     <div className="text-3xl font-extrabold">
                         {title}
                     </div>
@@ -18,7 +18,7 @@ export const FullBlog = ({title,content,authorName} : {title : string,content:st
                         {content}
                     </div>
                 </div>
-                <div className="grid col-span-4 pl-6 bg-yellow-200 justify-center ">
+                <div className="grid col-span-4 pl-6 bg-yellow-200 justify-center p-5 rounded">
                     <div>
                         Author
                     </div>

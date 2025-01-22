@@ -170,4 +170,59 @@ blogRouter.get('/bulk',async (c)=>{
             msg : "Caught!",
         });
     }
+});
+blogRouter.get('/spec/:id',async (c)=>{
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL,
+      }).$extends(withAccelerate());
+
+    try {
+        const id =  c.req.param("id");
+        const blogs = await prisma.post.findMany({
+            select : {
+                content : true,
+                title : true,
+                published : true,
+                id : true,
+                author : {
+                    select : {
+                        name : true
+                    }
+                }
+            },
+            where : {
+                author : {
+                    id : id
+                }
+            }
+        });
+        return c.json({blogs});
+    }
+    catch(err){
+        c.status(411);
+        return c.json({
+            msg : "Caught!",
+        });
+    }
+});
+blogRouter.post('/delete',async (c)=>{
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL,
+      }).$extends(withAccelerate());
+      try {
+        const body = await c.req.json();
+        const id = body.id;
+        const res = await prisma.post.delete({
+            where : {
+                id : id
+            }
+        });
+        if(res){
+            return c.json({msg : "successful"},200);
+        }
+        else return c.json({msg : "cant delete"},402);
+      }
+      catch(err){
+        return c.json({msg : "error"},403);
+      }
 })
